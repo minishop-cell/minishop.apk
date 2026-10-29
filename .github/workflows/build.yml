@@ -79,6 +79,7 @@ jobs:
 
           echo "Personal keystore decoded and verified."
 
+    
       - name: Configure personal APK signing
         env:
           STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
@@ -100,6 +101,8 @@ jobs:
             }
           }
           EOF
+          grep -A 8 "Mini Shop personal signing configuration" app/build.gradle
+
 
 
       - name: Build APK
@@ -114,11 +117,8 @@ jobs:
           sed -i "s/versionCode 1/versionCode ${{ github.run_number }}/" app/build.gradle
           chmod +x gradlew
           ./gradlew assembleDebug
-        working-directory: src/android
-        run: |
-          sed -i "s/versionCode 1/versionCode ${{ github.run_number }}/" app/build.gradle
-          chmod +x gradlew
-          ./gradlew assembleDebug
+
+      
 
       - name: Build again without the native scanner plugin (only runs if the first build failed)
         if: steps.build.outcome == 'failure'
@@ -133,13 +133,8 @@ jobs:
           npx cap sync android
           cd android
           ./gradlew clean assembleDebug
-        working-directory: src
-        run: |
-          echo "::warning::The build with the native scanner plugin failed, so this APK uses the built-in camera scanner instead."
-          npm uninstall @capacitor-mlkit/barcode-scanning || true
-          npx cap sync android
-          cd android
-          ./gradlew clean assembleDebug
+
+      
 
       - name: Name the file
         run: cp src/android/app/build/outputs/apk/debug/app-debug.apk MiniShop-Android.apk
