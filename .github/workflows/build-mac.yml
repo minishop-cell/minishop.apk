@@ -26,6 +26,7 @@ jobs:
           mkdir src
           cp -a "$(dirname "$f")"/. src/
           if [ -f cloud-config.js ]; then cp cloud-config.js src/docs/cloud-config.js; echo "Using cloud-config.js from the repo"; fi
+          if [ -f developer-info.js ]; then cp developer-info.js src/docs/developer-info.js; echo "Using developer-info.js from the repo"; fi
 
       - uses: actions/setup-node@v4
         with:
