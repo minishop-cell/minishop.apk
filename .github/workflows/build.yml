@@ -7,6 +7,7 @@ on:
       - 'mini-shop-native.zip'
       - 'cloud-config.js'
       - 'developer-info.js'
+      - 'license-config.js'
 
 permissions:
   contents: write
@@ -28,6 +29,7 @@ jobs:
           cp -a "$(dirname "$f")"/. src/
           if [ -f cloud-config.js ]; then cp cloud-config.js src/docs/cloud-config.js; echo "Using cloud-config.js from the repo"; fi
           if [ -f developer-info.js ]; then cp developer-info.js src/docs/developer-info.js; echo "Using developer-info.js from the repo"; fi
+          if [ -f license-config.js ]; then cp license-config.js src/docs/license-config.js; echo "Using license-config.js from the repo"; fi
           ls src
 
       - uses: actions/setup-node@v4
@@ -163,6 +165,7 @@ jobs:
           Copy-Item -Path "$($f.DirectoryName)\*" -Destination src -Recurse -Force
           if (Test-Path cloud-config.js) { Copy-Item cloud-config.js src/docs/cloud-config.js -Force }
           if (Test-Path developer-info.js) { Copy-Item developer-info.js src/docs/developer-info.js -Force }
+          if (Test-Path license-config.js) { Copy-Item license-config.js src/docs/license-config.js -Force }
 
       - uses: actions/setup-node@v4
         with:
